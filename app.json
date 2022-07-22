@@ -1,0 +1,8 @@
+{
+	"name": "Heroku Caddy",
+	"description": "An simple way to create reverse proxy.",
+	"keywords": ["reverse proxy", "caddy"],
+	"website": "",
+	"repository": "",
+	"stack": "container"
+}
