@@ -1,3 +1,95 @@
 :{$PORT} {
-	respond "Hello, world!"
+
+
+    handle_path /* {
+
+        #tls /data/data/com.termux/files/home/key/cloud.crt /data/data/com.termux/files/home/key/cloud.key #布置SSL
+        encode  zstd gzip        # 压缩资源文件 加快访问速度
+        # root  *  /www/
+        file_server browse
+        # file_server /* browse {               # 启用静态文件服务器
+            # root  ./www        # 设置根目录路径
+            # hide      .git        # 隐藏指定文件
+            # index     index.html guideline.html
+            # browse                  # 对于没有索引文件的目录的请求 为其启用文件列表 [<template_file>]
+            # status    404         # xxx时才启用
+            # precompressed zstd br gzip
+            # disable_canonical_uris
+        # }
+    }
+
+	route /admin/* {
+        respond "I am admin"
+    }
+
+
+    handle_path /google/* {
+        # rewrite * /{path}  #不用写
+        # redir https://{host}
+        # uri strip_prefix /google
+        # uri replace /google/ //
+        reverse_proxy * https://www.google.com {
+            header_up Host {upstream_hostport}
+        }
+    }
+
+
+    handle_path /mailnesia/* {
+        reverse_proxy * https://mailnesia.com {
+            header_up Host {upstream_hostport}
+        }
+    }
+
+    handle_path /ktnslt/* {
+        reverse_proxy * https://kill-the-newsletter.com {
+            header_up Host {upstream_hostport}
+        }
+    }
+
+    handle_path /ftchinese/* {
+        reverse_proxy * https://www.ftchinese.com {
+            header_up Host {upstream_hostport}
+        }
+    }
+
+    handle_path /cdt/* {
+        reverse_proxy * https://chinadigitaltimes.net {
+            header_up Host {upstream_hostport}
+        }
+    }
+
+    handle_path /k4r/* {
+        reverse_proxy * http://feedmaker.kindle4rss.com {
+            header_up Host {upstream_hostport}
+        }
+    }
+
 }
+
+# :{$PORT} {
+# 	reverse_proxy * {$UPSTREAM:"https://www.google.com"} {
+# 		header_up Host {upstream_hostport}
+# 	}
+# }
+
+# 10.10.7.10 {
+#     respond "I am 10929"
+# }
+
+# :80,:443 {
+#     reverse_proxy https://myapp.herokuapp.com {
+#       header_up Host {http.reverse_proxy.upstream.hostport}
+#       header_up X-Real-IP {http.reverse-proxy.upstream.address}
+#       header_up X-Forwarded-Port {http.request.port}
+#       header_up X-Forwarded-Host {http.request.host}
+#     }
+
+#     tls me@mydomain.com {
+#       on_demand
+#     }
+# }
+
+                    # https://www.google.com/search?q=%E6%88%91&source=hp&ei=ivbbYvDBPLyPseMP2u-puAE&iflsig=AJiK0e8AAAAAYtwEm_AXRQtWHQyYLu1NhaDO65wbFKpc&ved=0ahUKEwjwrsn1jY_5AhW8R2wGHdp3ChcQ4dUDCAc&uact=5&oq=%E6%88%91&gs_lcp=Cgdnd3Mtd2l6EAMyBAguEEMyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgAQ6FAgAEOoCELQCEIoDELcDENQDEOUCUP8DWIIIYMYKaABwAHgAgAG7BIgB7geSAQU0LTEuMZgBAKABAbABBw&sclient=gws-wiz
+                    # https://www.google.com/search?q=%E6%88%91&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjGhq33jY_5AhW6RmwGHc8rAFwQ_AUoAXoECAEQAw&biw=1746&bih=959&dpr=1
+    # https://sayonara3.herokuapp.com/goo/search?q=%E6%88%91&btnK=Google+%E6%90%9C%E7%B4%A2&source=hp&ei=wsbbYtG6JIygiLMPtJ-LkAg&iflsig=AJiK0e8AAAAAYtvU0lpCVha9NJ5MrZVqwV4YYdP3jZOa
+    # https://sayonara3.herokuapp.com/goo/search?q=%E6%88%91&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjL5KC8i4_5AhXAEmIAHV57CQIQ_AUoAXoECAEQAw
